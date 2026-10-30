@@ -9,8 +9,8 @@ Aplikacja posiada:
 - Funkcję AbortController przeciw Race Conditions
 
   Formularz:
-  - Zarzadząnie poziomem zaawansowania kandydata
-  - Uwagi rekrutera co do kodu
+- Zarzadząnie poziomem zaawansowania kandydata
+- Uwagi rekrutera co do kodu
 
 
   Będę serdecznie wdzięczny za uzupełnienie Formularza w momencie obejrzenia projektu,gdyż uwagi będą dla mnie niezwykle cenne w ramach dalszego doskonalenia mojej wiedzy
