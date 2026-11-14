@@ -2,7 +2,7 @@
 <div class="body">
   <div class="container">
     <form class="form" @submit.prevent="handleSubmit">
-      <h2>Formularz rejestracyjny:</h2>
+      <h2>Formularz rekrutacyjny:</h2>
 
       <div class="input"> 
         <label for="name">Imię</label>
