@@ -59,9 +59,7 @@ export interface Coin {
   name:string,
   current_price: number,
   price_change_percentage_24h: number
-    sparkline_in_7d?: {
-    price: number[]
-  }
+ 
 }
 
 const activeTheme = ref< 'white' | 'gray' | 'whitesmoke' | 'black'> ('white')
@@ -71,7 +69,7 @@ const activeTheme = ref< 'white' | 'gray' | 'whitesmoke' | 'black'> ('white')
 
  const searchQuery = ref("")
 
-const debounce = 500
+const debounce = 800
 
 const refreshinterval = 60000
 
@@ -96,12 +94,12 @@ let abortController: AbortController | undefined = undefined
      abortController.abort()
      }
 
-     abortController = new AbortController(); //przypisanie wartosci abort(przerywanie zapytan) do zmiennej
-     const signal = abortController.signal //przypisanie wartosci nasłuchującej url
+     abortController = new AbortController();
+     const signal = abortController.signal 
  
-      errorinfo.value = null // Funkcja startuje więc z początku nie ma błędu
+      errorinfo.value = null 
 
- loading.value = true //Ładowanie danych w toku
+ loading.value = true 
       try {
 
 const response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.value}&order=market_cap_desc&per_page=10&page=1&sparkline=true`, {signal});         
@@ -112,32 +110,28 @@ if(!response.ok) {
 
 
 
-const data = await response.json() as Coin[]//Rozpakuj dane
+const data = await response.json() as Coin[]
+success.value = true 
 
-success.value = true //Wyswietl komunikat ze poprawnie pobrano dane,są 100% poprawne jesli nastąpiło juz rozpakowywanie
 
-
-      coinboard.value = data//Dane ktore zostaly pobrane,przypisz do tablicy
-   
+      coinboard.value = data
     } catch(error) {
 
-    if(error instanceof Error) { //jesli bład pochodzi z rodziny "Error" to mozemy wyciągnąć z niej nazwy lub wiadomość i pokazac uzytkownikowi
-      if(error.name === 'AbortError') 
+    if(error instanceof Error) { 
       return
-    errorinfo.value = error.message  //przypisujemy oficjalny błąd przewidziany przez przeglądarke
+    errorinfo.value = error.message 
     }
 
     else {
-      errorinfo.value = 'Wystąpił nieznany błąd' // w przeciwym wypadku (else), piszemy ze ten błąd nie jest znany naszej przeglądarce
+      errorinfo.value = 'Wystąpił nieznany błąd' 
     }
 
 
 
-  success.value = false //Wystąpił blad,wiec ukrywamy success
-  }
+  success.value = false 
    
   finally {
-    loading.value = false //warunek który ma zostac na samym końcu zawsze wyłączony, bo kręciłby sie bez konca
+    loading.value = false 
   }
 
 
@@ -151,7 +145,7 @@ success.value = true //Wyswietl komunikat ze poprawnie pobrano dane,są 100% pop
         coinprice()
       }, refreshinterval);
 
-       //interwał odswiezania strony co 60 sekund,wpisany do zmiennej refreshinterval
+     
     })
 
 
@@ -171,17 +165,19 @@ success.value = true //Wyswietl komunikat ze poprawnie pobrano dane,są 100% pop
     else {activeTheme.value = 'white'}
     }
 
+    watch(currency, () => {
+      
+      clearTimeout(delay)
+      delay = setTimeout(() => {
+        coinprice()
+      }, debounce);
+    } )
 
-watch(searchQuery, () => {
-  clearTimeout(delay)
-  delay = setTimeout(() => {
-    coinprice()
-  }, debounce);  
-} )
+
    onUnmounted(()=> {
     clearInterval(refresh)
     clearTimeout(delay)
-    //czyszczenie zmiennych by nie działały w tle podczas przełączenia strony
+   
    })
 
 
